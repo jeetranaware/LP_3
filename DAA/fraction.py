@@ -1,26 +1,24 @@
-class Item:
-    def __init__(self, profit, weight):
-        self.profit = profit
-        self.weight = weight
-
-def fractionalKnapsack(w, arr):
-    arr.sort(key=lambda x: x.profit/x.weight, reverse=True)
-    finalValue = 0.0
-    for item in arr:
-        if w >= item.weight:
-            finalValue += item.profit
-            w -= item.weight
-        else:
-            finalValue += item.profit * (w/item.weight)
+def fractional_knapsack(capacity, values, weights):
+    items = sorted(zip(values, weights), key=lambda x: x[0] / x[1], reverse=True)
+    
+    total_value = 0 
+    
+    for value, weight in items:
+        if capacity <= 0: 
             break
-    return finalValue
+        
+        if weight <= capacity:
+            total_value += value
+            capacity -= weight
+        else:
+            total_value += value * (capacity / weight)
+            break  
 
-if __name__ == "__main__":
-    n = int(input("Enter number of items-\n"))
-    arr = []
-    for i in range(n):
-        profit = int(input("Enter profit of item " + str(i + 1) + "-\n"))
-        weight = int(input("Enter weight of item " + str(i + 1) + "-\n"))
-        arr.append(Item(profit, weight))
-    w = int(input("Enter capacity of knapsack-\n"))
-    print("Maximum value in knapsack: ", fractionalKnapsack(w, arr))
+    return total_value
+
+values = [25, 24 , 15]  
+weights = [18, 15, 10]    
+capacity = 20           
+
+max_value = fractional_knapsack(capacity, values, weights)
+print("Maximum value in Knapsack =", max_value)
